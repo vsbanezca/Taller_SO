@@ -94,5 +94,10 @@ int main(int argc, char *argv[]) {
     sem_destroy(&semB_C);
 
     printf("\n=== FIN DE LA EJECUCIÓN ===\n");
+    printf("\n=== INTEGRANTES DEL GRUPO ===\n");
+    printf("-> Vanessa Banezca CI \n");
+    printf("-> Anabella Freites CI 31852286\n");
+    printf("-> José Quintero CI 31750780\n");
+    printf("=================================\n");
     return 0;
 }
