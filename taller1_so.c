@@ -19,13 +19,13 @@ sem_t semB_C; // Notifica a C que B escribió Cifra 2
 void* HiloA(void* arg) {
     int cifra_a = 15;
     
-    // TO-DO Proteger escritura con Mutex e inicializar variable compartida
+    // Proteger escritura con Mutex e inicializar variable compartida
     pthread_mutex_lock(&mutex_variable);
     variable_compartida = cifra_a;
     printf("[Hilo A] Paso 1: Asignando %d a la variable compartida...\n", cifra_a);
     pthread_mutex_unlock(&mutex_variable);
     
-    // TO-DO Notificar a Hilo C
+    // Notificar a Hilo C
     sem_post(&semA_C);
     return NULL;
 }
@@ -44,17 +44,25 @@ void* HiloB(void* arg) {
     return NULL;
 }
 
-// --- INTEGRANTE 3: Hilo C ---
+// --- INTEGRANTE 3 (Vanessa Banezca): Hilo C ---
 void* HiloC(void* arg) {
     int cifra1 = 0, cifra2 = 0;
 
     // TO-DO --- PARTE 1: Procesar Cifra 1 ---
-    
+    sem_wait(&semA_C);
+    pthread_mutex_lock(&mutex_variable);
+    cifra1 = variable_compartida;
+    variable_compartida = 0;
+    pthread_mutex_unlock(&mutex_variable);
 
     // TO-DO Dar paso a Hilo B
-
+    sem_wait(&semC_B);
     // TO-DO --- PARTE 2: Procesar Cifra 2 y Consolidar ---
-
+    sem_wait(&semB_C);
+    pthread_mutex_lock(&mutex_variable);
+    cifra2 = variable_compartida;
+    pthread_mutex_unlock(&mutex_variable);
+    float suma = cifra1 + cifra2;
 
     // Renderizado final
     printf("\n================ RENDERIZADO DE RESULTADOS ================\n");
@@ -95,7 +103,7 @@ int main(int argc, char *argv[]) {
 
     printf("\n=== FIN DE LA EJECUCIÓN ===\n");
     printf("\n=== INTEGRANTES DEL GRUPO ===\n");
-    printf("-> Vanessa Banezca CI \n");
+    printf("-> Vanessa Banezca CI 32334079 \n");
     printf("-> Anabella Freites CI 31852286\n");
     printf("-> José Quintero CI 31750780\n");
     printf("=================================\n");
