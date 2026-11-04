@@ -22,7 +22,7 @@ void* HiloA(void* arg) {
     // Proteger escritura con Mutex e inicializar variable compartida
     pthread_mutex_lock(&mutex_variable);
     variable_compartida = cifra_a;
-    printf("[Hilo A] Paso 1: Asignando %d a la variable compartida...\n", cifra_a);
+    printf("[Hilo A - Dev: Anabella Freites] Paso 1: Asignando %d a la variable compartida...\n", cifra_a);
     pthread_mutex_unlock(&mutex_variable);
     
     // Notificar a Hilo C
@@ -35,12 +35,18 @@ void* HiloB(void* arg) {
     int cifra_b = 25;
     
     // TO-DO Esperar a que Hilo C haya leído Cifra 1 y limpiado la variable
+    printf("[Hilo B - Dev: Jose Quintero] Paso 3: Espera a que Hilo C lea y limpie la variable compartida \n ");
+    sem_wait(&semC_B);
     
     // TO-DO Proteger escritura con Mutex y actualizar variable compartida
-   
+    pthread_mutex_lock(&mutex_variable);
+    variable_compartida = cifra_b;
+    printf("[Hilo B] Paso 4: Asignando %d a la variable compartida...\n", cifra_b);
+    pthread_mutex_unlock(&mutex_variable);
     
     // TO-DO Notificar a Hilo C
-	
+	sem_post(&semB_C);
+    
     return NULL;
 }
 
